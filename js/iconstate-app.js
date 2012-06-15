@@ -244,7 +244,7 @@ var IconStateApp = function() {
 
 					if (iconstate_cell.folder)
 					{
-						var new_folder = { displayName: iconstate_cell.title, iconLists: [[]], listType: "folder" };
+						var new_folder = { displayName: iconstate_cell.title != "" ? iconstate_cell.title : "no name", iconLists: [[]], listType: "folder" };
 
 						ko.utils.arrayForEach(iconstate_cell.folder, function(iconstate_cell_cell) {
 
