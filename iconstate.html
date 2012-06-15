@@ -1,0 +1,171 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Cache-control" content="no-cache">
+    <title>IconState - Organize iPhone Homescreen App Icons</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+    </style>
+    <!-- <link href="css/bootstrap-responsive.css" rel="stylesheet"> -->
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le fav and touch icons -->
+    <!--
+    <link rel="shortcut icon" href="ico/favicon.ico">
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="ico/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="ico/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="ico/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="ico/apple-touch-icon-57-precomposed.png">
+    -->
+  </head>
+
+  <body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="#">IconState</a>
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li class="active"><a href="#">Home</a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+        <section id="organize">
+            <div class="page-header">
+                <h1>Organize iPhone Homescreen App Icons</h1>
+            </div>
+        </section>
+      
+
+      <div class="row">
+          <div class="span12">
+            <p>Convert Library/Springboard/IconState.plist from binary to JSON and paste it below</p>
+          </div>
+      </div>
+
+
+        <div class="row">
+            <div class="span5">
+                <textarea id="iconstate-plist-textarea" class="span5" style="height:10em;" data-bind="value: iconstate_plist_textarea">Loading...</textarea>
+            </div>
+            <div class="span2">
+                <p>
+                <input type="button" class="btn btn-primary" value="Load IconState.plist" data-bind="click: load_iconstate_pages" />
+                </p>
+                <p>
+                <label class="checkbox"><input type="checkbox" data-bind="checked: sort_by_name" />Sort by Name</label>
+                </p>
+                <p>
+                <label class="checkbox"><input type="checkbox" data-bind="checked: sort_by_category" />Sort by Category</label>
+                </p>
+                <p>
+                <label class="checkbox"><input type="checkbox" data-bind="checked: group_by_category" />Group by Category</label>
+                </p>
+                <p>
+                <input type="button" class="btn" value="Update" data-bind="click: sort_iconstate_pages" />
+                </p>
+            </div>
+            <div class="span5">
+                <textarea id="iconstate-plist-textarea-new" class="span5" style="height:10em;" data-bind="value: iconstate_plist_textarea_new"></textarea>
+            </div>
+        </div>  
+
+      <div id="pages" data-bind="foreach: iconstate_pages">
+      <hr />
+      <div class="row">   
+      <div class="span10" data-bind="attr: {id: 'page-' + $index()}">
+      <div class="row">   
+      <div class="span2">
+      <h2>Page <span data-bind="text: $index() + 1"></span></h2>
+      <label class="checkbox"><input type="checkbox" data-bind="checked: ignore" />ignore</label>
+      </div>
+      <div class="span8">
+
+        <div class="row" style="height:612px;">    
+
+        <!-- ko foreach: iconstate_cells -->
+          <div class="span2" data-bind="attr: {title: hover_title }">
+            <!-- ko ifnot: folder -->
+            <!-- <span style="position:absolute">
+            <span data-bind="text: title"></span><br />
+            <span data-bind="text: category"></span>
+            </span> -->
+            <a href="#result" data-bind="click: function(data) { console.log($data.title, $root.app_data.result[$data.title]); }"><img data-bind="attr: {src: icon}" style="height:auto; width:100%; margin-bottom: 1em;" /></a>
+            <!-- /ko -->
+            <!-- ko if: folder -->     
+              <div class="row-fluid" style="height:140px; background-color:#eee; margin-bottom: 1em;" data-bind="foreach: folder">
+                <div class="span3" data-bind="attr: {title: hover_title }">
+                  <a href="#result" data-bind="click: function(data) { console.log($data.title, $root.app_data.result[$data.title]); }"><img data-bind="attr: {src: icon}" style="height:auto; width:100%; margin-bottom: 1em;" /></a>
+                </div>
+              </div>
+            <!-- /ko -->
+          </div>
+        <!-- /ko -->
+
+        </div>
+      </div>
+      </div>
+      </div>
+      </div>
+      </div>
+
+
+      <hr />
+      <footer class="footer">
+      <p class="pull-right"><a href="#">Back to top</a></p>
+      <p>IconState - Organize iPhone Homescreen App Icons</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+    <!-- Le javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/knockout-2.1.0.js"></script>
+    <script src="js/iconstate-app.js"></script>
+    <!--
+    <script src="js/bootstrap-transition.js"></script>
+    <script src="js/bootstrap-alert.js"></script>
+    <script src="js/bootstrap-modal.js"></script>
+    <script src="js/bootstrap-dropdown.js"></script>
+    <script src="js/bootstrap-scrollspy.js"></script>
+    <script src="js/bootstrap-tab.js"></script>
+    <script src="js/bootstrap-tooltip.js"></script>
+    <script src="js/bootstrap-popover.js"></script>
+    <script src="js/bootstrap-button.js"></script>
+    <script src="js/bootstrap-collapse.js"></script>
+    <script src="js/bootstrap-carousel.js"></script>
+    <script src="js/bootstrap-typeahead.js"></script>
+    -->
+
+  </body>
+</html>
