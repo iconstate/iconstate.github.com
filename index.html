@@ -13,7 +13,7 @@
     <link href="css/bootstrap.css" rel="stylesheet">
     <style>
       body {
-        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        /*padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
       }
     </style>
     <!-- <link href="css/bootstrap-responsive.css" rel="stylesheet"> -->
@@ -35,7 +35,7 @@
 
   <body>
 
-    <div class="navbar navbar-fixed-top">
+    <div class="navbar">
       <div class="navbar-inner">
         <div class="container">
           <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -47,8 +47,6 @@
           <div class="nav-collapse">
             <ul class="nav">
               <li class="active"><a href="#">Home</a></li>
-              <li><a href="#about">About</a></li>
-              <li><a href="#contact">Contact</a></li>
             </ul>
           </div><!--/.nav-collapse -->
         </div>
@@ -66,34 +64,34 @@
 
       <div class="row">
           <div class="span12">
-            <p>Convert Library/Springboard/IconState.plist from binary to XML to JSON using plutil or plutil.pl and paste it below.</p>
+            <p>1. Convert Library/Springboard/IconState.plist from binary to XML to JSON using plutil or plutil.pl. 2. Paste it below. 3. Click Load.</p>
           </div>
       </div>
 
 
         <div class="row">
-            <div class="span5">
-                <textarea id="iconstate-plist-textarea" class="span5" style="height:10em;" data-bind="value: iconstate_plist_textarea">Loading...</textarea>
+            <div class="span4">
+                <textarea id="iconstate-plist-textarea" class="span4" style="height:10em;" wrap="off" data-bind="value: iconstate_plist_textarea">Loading...</textarea>
             </div>
             <div class="span2">
                 <p>
-                <input type="button" class="btn btn-primary" value="Load IconState.plist" data-bind="click: load_iconstate_pages" />
+                <label class="checkbox"><input type="checkbox" data-bind="checked: show_titles" />Show Titles</label>
+                <label class="radio"><input type="radio" name="sortby" value="sortname" data-bind="checked: sort_by" />Sort by Name</label>
+                <label class="radio"><input type="radio" name="sortby" value="sortcategory" data-bind="checked: sort_by" />Sort by Category</label>
+                <label class="radio"><input type="radio" name="sortby" value="groupcategory" data-bind="checked: sort_by" />Group by Category</label>
                 </p>
                 <p>
-                <label class="checkbox"><input type="checkbox" data-bind="checked: sort_by_name" />Sort by Name</label>
-                </p>
-                <p>
-                <label class="checkbox"><input type="checkbox" data-bind="checked: sort_by_category" />Sort by Category</label>
-                </p>
-                <p>
-                <label class="checkbox"><input type="checkbox" data-bind="checked: group_by_category" />Group by Category</label>
-                </p>
-                <p>
-                <input type="button" class="btn" value="Update" data-bind="click: sort_iconstate_pages" />
+                <input type="button" class="btn btn-primary" value="Load" data-bind="click: load_iconstate_pages" />
+                <input type="button" class="btn btn-success" value="Update" data-bind="click: sort_iconstate_pages" />
                 </p>
             </div>
-            <div class="span5">
-                <textarea id="iconstate-plist-textarea-new" class="span5" style="height:10em;" data-bind="value: iconstate_plist_textarea_new"></textarea>
+            <div class="span2" style="max-height:10em; overflow:auto;">
+                <p data-bind="foreach: iconstate_pages">
+                <label class="checkbox"><input type="checkbox" name="sortby" data-bind="checked: ignore" />Ignore page <span data-bind="text: $index() + 1"></span> </label>
+                </p>
+            </div>
+            <div class="span4">
+                <textarea id="iconstate-plist-textarea-new" class="span4" style="height:10em;" wrap="off" data-bind="value: iconstate_plist_textarea_new"></textarea>
             </div>
         </div>  
 
@@ -101,37 +99,38 @@
       <hr />
       <div class="row">   
       <div class="span10" data-bind="attr: {id: 'page-' + $index()}">
-      <div class="row">   
-      <div class="span2">
-      <h2>Page <span data-bind="text: $index() + 1"></span></h2>
-      <label class="checkbox"><input type="checkbox" data-bind="checked: ignore" />ignore</label>
-      </div>
-      <div class="span8">
-
-        <div class="row" style="height:612px;">    
-
-        <!-- ko foreach: iconstate_cells -->
-          <div class="span2" data-bind="attr: {title: hover_title }">
-            <!-- ko ifnot: folder -->
-            <!-- <span style="position:absolute">
-            <span data-bind="text: title"></span><br />
-            <span data-bind="text: category"></span>
-            </span> -->
-            <a href="#result" data-bind="click: function(data) { console.log($data.title, $root.app_data.result[$data.title]); }"><img data-bind="attr: {src: icon}" style="height:auto; width:100%; margin-bottom: 1em;" /></a>
-            <!-- /ko -->
-            <!-- ko if: folder -->     
-              <div class="row-fluid" style="height:140px; background-color:#eee; margin-bottom: 1em;" data-bind="foreach: folder">
-                <div class="span3" data-bind="attr: {title: hover_title }">
-                  <a href="#result" data-bind="click: function(data) { console.log($data.title, $root.app_data.result[$data.title]); }"><img data-bind="attr: {src: icon}" style="height:auto; width:100%; margin-bottom: 1em;" /></a>
-                </div>
-              </div>
-            <!-- /ko -->
-          </div>
-        <!-- /ko -->
-
+        <div class="row">   
+        <div class="span2">
+        <h2>Page <span data-bind="text: $index() + 1"></span></h2>
+        <label class="checkbox"><input type="checkbox" data-bind="checked: ignore" />ignore</label>
         </div>
-      </div>
-      </div>
+        <div class="span8">
+
+          <div class="row" style="height:612px;" data-bind="sortable: iconstate_cells">    
+
+            <div class="span2" data-bind="attr: {title: hover_title }">
+              <!-- ko ifnot: folder -->
+              <div style="position:absolute; width:140px; overflow: hidden; white-space:nowrap; opacity:0.9" data-bind="if: $root.show_titles">
+              <div class="label" data-bind="text: hover_title"></div>
+              </div>
+              <!-- <a href="#result" data-bind="click: function(data) { console.log($data.title, $root.app_data.result[$data.title]); }"> -->
+                <img data-bind="attr: {src: icon}" style="height:auto; width:100%; margin-bottom: 1em;" />
+              <!-- </a> -->
+              <!-- /ko -->
+              <!-- ko if: folder -->     
+                <div class="row-fluid" style="height:140px; background-color:#eee; margin-bottom: 1em;" data-bind="sortable: folder">
+                  <div class="span3" data-bind="attr: {title: hover_title }">
+                    <!-- <a href="#result" data-bind="click: function(data) { console.log($data.title, $root.app_data.result[$data.title]); }"> -->
+                      <img data-bind="attr: {src: icon}" style="height:auto; width:100%; margin-bottom: 1em;" />
+                    <!-- </a> -->
+                  </div>
+                </div>
+              <!-- /ko -->
+            </div>
+
+          </div>
+        </div>
+        </div>
       </div>
       </div>
       </div>
@@ -149,8 +148,10 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script src="js/jquery-1.7.2.min.js"></script>
+    <script src="js/jquery-ui-1.8.21.custom.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/knockout-2.1.0.js"></script>
+    <script src="js/knockout-sortable.min.js"></script>
     <script src="js/iconstate-app.js"></script>
     <!--
     <script src="js/bootstrap-transition.js"></script>
