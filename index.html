@@ -63,35 +63,65 @@
       
 
       <div class="row">
-          <div class="span12">
-            <p>1. Convert Library/Springboard/IconState.plist from binary to XML to JSON using plutil or plutil.pl. 2. Paste it below. 3. Click Load.</p>
+          <div class="span6">
+            <ol>
+            <li>Download <a href="https://secure.avangate.com/order/product.php?PRODS=3061554&QTY=1&AFFILIATE=36486">iBackupBot for Windows</a> or <a href="https://secure.avangate.com/order/product.php?PRODS=4543377&QTY=1&AFFILIATE=36486">iBackupBot for Mac</a></li>
+            <li>Export Library/Springboard/IconState.plist (file with icon settings)</li>
+            <li>Convert it from <a href="http://plists.herokuapp.com/binary-to-json">binary to JSON</a></li>
+            <li>Paste it below</li>
+            <li>Click Load</li>
+            </ol>
+          </div>
+          <div class="span6" data-bind="visible: iconstate_loaded">
+            <ol>
+            <li>Select sort options and pages to ignore in sort</li>
+            <li>Click Update</li>
+            <li>Click Save to download new IconState.plist<br />(or convert it from <a href="http://plists.herokuapp.com/json-to-binary">JSON to binary</a>)</li>
+            <li>Import and restore using iBackupBot</li>
+            </ol>
           </div>
       </div>
 
+      <hr />
 
         <div class="row">
             <div class="span4">
-                <textarea id="iconstate-plist-textarea" class="span4" style="height:10em;" wrap="off" data-bind="value: iconstate_plist_textarea">Loading...</textarea>
-            </div>
-            <div class="span2">
-                <p>
-                <label class="checkbox"><input type="checkbox" data-bind="checked: show_titles" />Show Titles</label>
-                <label class="radio"><input type="radio" name="sortby" value="sortname" data-bind="checked: sort_by" />Sort by Name</label>
-                <label class="radio"><input type="radio" name="sortby" value="sortcategory" data-bind="checked: sort_by" />Sort by Category</label>
-                <label class="radio"><input type="radio" name="sortby" value="groupcategory" data-bind="checked: sort_by" />Group by Category</label>
-                </p>
-                <p>
-                <input type="button" class="btn btn-primary" value="Load" data-bind="click: load_iconstate_pages" />
-                <input type="button" class="btn btn-success" value="Update" data-bind="click: sort_iconstate_pages" />
-                </p>
-            </div>
-            <div class="span2" style="max-height:10em; overflow:auto;">
-                <p data-bind="foreach: iconstate_pages">
-                <label class="checkbox"><input type="checkbox" name="sortby" data-bind="checked: ignore" />Ignore page <span data-bind="text: $index() + 1"></span> </label>
-                </p>
+                <textarea id="iconstate-plist-textarea" class="span4" style="height:20em;" wrap="off" data-bind="value: iconstate_plist_textarea">Loading...</textarea>
             </div>
             <div class="span4">
-                <textarea id="iconstate-plist-textarea-new" class="span4" style="height:10em;" wrap="off" data-bind="value: iconstate_plist_textarea_new"></textarea>
+              <div class="row">
+              <div class="span2"> 
+                <input type="button" class="btn btn-success" value="Load" data-bind="click: load_iconstate_pages, value: iconstate_loaded() ? 'Reload' : 'Load' " />
+              </div>
+              <div class="span2" style="text-align:right;" data-bind="visible: iconstate_loaded"> 
+                <span class="label label-important">new IconState.plist &rarr;</span>
+              </div>
+              </div>
+              <div class="row" data-bind="visible: iconstate_loaded">     
+              <div class="span2" style="max-height:20em; overflow:auto;">
+                  <hr />
+                  <p data-bind="foreach: iconstate_pages">
+                  <label class="checkbox"><input type="checkbox" name="sortby" data-bind="checked: ignore" />Ignore page <span data-bind="text: $index() + 1"></span> </label>
+                  </p>
+              </div>           
+              <div class="span2">   
+                  <hr />
+                  <label class="checkbox"><input type="checkbox" data-bind="checked: show_titles" />Show Titles</label>
+
+                  <hr />
+                  <label class="radio"><input type="radio" name="sortby" value="sortname" data-bind="checked: sort_by" />Sort by Name</label>
+                  <label class="radio"><input type="radio" name="sortby" value="sortcategory" data-bind="checked: sort_by" />Sort by Category</label>
+                  <label class="radio"><input type="radio" name="sortby" value="groupcategory" data-bind="checked: sort_by" />Group by Category</label>    
+                  <hr />
+                  <input type="button" class="btn btn-primary" value="Update" data-bind="click: sort_iconstate_pages" />                  
+                  <input type="button" class="btn" value="Save" data-bind="click: function() { $('#json-to-binary').submit(); }" />
+              </div>
+              </div>
+            </div>
+            <div class="span4" data-bind="visible: iconstate_loaded">
+                <form id="json-to-binary" method="post" action="http://plists.herokuapp.com/json-to-binary">
+                <textarea id="iconstate-plist-textarea-new" name="json_plist" class="span4" style="height:20em;" wrap="off" data-bind="value: iconstate_plist_textarea_new"></textarea>
+                </form>
             </div>
         </div>  
 

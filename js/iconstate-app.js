@@ -128,7 +128,7 @@ var IconStateApp = function() {
 							    ]
 							};
 
-	self.iconstate_plist_textarea = ko.observable(JSON.stringify(self.iconstate_plist, null, 4));
+	self.iconstate_plist_textarea = ko.observable("/*\n * Sample data\n * Paste your IconState.plist here\n */\n\n" + JSON.stringify(self.iconstate_plist, null, 4));
 	self.iconstate_plist_textarea_new = ko.observable("");
 
 
@@ -136,6 +136,8 @@ var IconStateApp = function() {
 	// self.sort_by_category = ko.observable(false);
 	// self.group_by_category = ko.observable(false);
 	
+	self.iconstate_loaded = ko.observable(false);
+
 	self.show_titles = ko.observable(false);
 
 	self.sort_by = ko.observable("");
@@ -245,6 +247,8 @@ var IconStateApp = function() {
 				pages.push(page);
 
 			});
+
+			self.iconstate_loaded(true);
 
 		}
 
