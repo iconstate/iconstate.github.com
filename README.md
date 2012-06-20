@@ -21,7 +21,6 @@ Made with
 * [Knockout Sortable](https://github.com/rniemeyer/knockout-sortable)
 * [jQuery](http://jquery.com/)
 * [Twitter Bootstrap](http://twitter.github.com/bootstrap)
-
 * [CFPropertyList](https://github.com/ckruse/CFPropertyList)
 * [Sinatra](http://www.sinatrarb.com/)
 * [Heroku](http://www.heroku.com/)
