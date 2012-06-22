@@ -4,9 +4,9 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Cache-control" content="no-cache">
-    <title>IconState - Organize iPhone Home Screen App Icons</title>
+    <title>IconState - Organize SpringBoard Home Screen App Icons for iOS, iPhone, iPad</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="IconState - Organize iPhone Home Screen App Icons">
+    <meta name="description" content="IconState - Organize SpringBoard Home Screen App Icons for iOS, iPhone, iPad">
     <meta name="author" content="IconState">
 
     <!-- Le styles -->
@@ -57,28 +57,38 @@
 
         <section id="organize">
             <div class="page-header">
-                <h1>Organize iPhone Home Screen App Icons</h1>
+                <h2>Organize SpringBoard Home Screen App Icons for iOS, iPhone, iPad</h2>
             </div>
         </section>
       
 
       <div class="row">
           <div class="span6">
-            <ol>
+            <ul>
+            <li>Back up your iPhone with iTunes</li>
             <li>Download <a href="https://secure.avangate.com/order/product.php?PRODS=3061554&QTY=1&AFFILIATE=36486">iBackupBot for Windows</a> or <a href="https://secure.avangate.com/order/product.php?PRODS=4543377&QTY=1&AFFILIATE=36486">iBackupBot for Mac</a></li>
             <li>Export Library/Springboard/IconState.plist (file with icon settings)</li>
-            <li>Convert it from <a href="http://plists.herokuapp.com/binary-to-json">binary to JSON</a></li>
-            <li>Paste it below</li>
-            <li>Click Load</li>
-            </ol>
+            <li>Upload it<br />(or convert it from <a href="http://iconstate.herokuapp.com/iconstate-binary-to-json">binary to JSON</a>, paste it below and click Load)<br /><iframe src="http://iconstate.herokuapp.com/binary-to-json" style="border:none; height:6em; margin-top:1em;"></iframe></li>
+            </ul>
+
+            
           </div>
           <div class="span6" data-bind="visible: iconstate_loaded">
-            <ol>
+            <ul>
             <li>Select sort options and pages to ignore in sort</li>
             <li>Click Update</li>
-            <li>Click Save to download new IconState.plist<br />(or convert it from <a href="http://plists.herokuapp.com/json-to-binary">JSON to binary</a>)</li>
+            <li>Click Save to download new IconState.plist<br />(or copy it from below and convert it from <a href="http://iconstate.herokuapp.com/json-to-binary">JSON to binary</a>)</li>
             <li>Import and restore using iBackupBot</li>
-            </ol>
+            </ul>
+
+            <hr />
+            <label class="radio inline"><input type="radio" name="device_type" value="0" data-bind="checked: device_type" />iPhone</label>
+            <label class="radio inline"><input type="radio" name="device_type" value="1" data-bind="checked: device_type" />iPad Portrait</label>
+            <label class="radio inline"><input type="radio" name="device_type" value="2" data-bind="checked: device_type" />iPad Landscape</label>
+            <br />            
+            <label class="radio inline"><input type="radio" name="apps_per_folder" value="0" data-bind="checked: apps_per_folder" /><span data-bind="text: $root.device_type() == 0 ? '12' : '20'"></span> apps per folder</label>
+            <label class="radio inline"><input type="radio" name="apps_per_folder" value="9" data-bind="checked: apps_per_folder" />9 apps per folder </label>
+            
           </div>
       </div>
 
@@ -91,7 +101,7 @@
             <div class="span4">
               <div class="row">
               <div class="span2"> 
-                <input type="button" class="btn btn-success" value="Load" data-bind="click: load_iconstate_pages, value: iconstate_loaded() ? 'Reload' : 'Load' " />
+                <input type="button" class="btn btn-success" value="Load" data-bind="click: load_iconstate_pages, value: 'Load' " />
               </div>
               <div class="span2" style="text-align:right;" data-bind="visible: iconstate_loaded"> 
                 <span class="label label-important">new IconState.plist &rarr;</span>
@@ -106,8 +116,7 @@
               </div>           
               <div class="span2">   
                   <hr />
-                  <label class="checkbox"><input type="checkbox" data-bind="checked: show_titles" />Show Titles</label>
-
+                  <label class="checkbox"><input type="checkbox" data-bind="checked: $root.show_titles" />Show titles</label>
                   <hr />
                   <label class="radio"><input type="radio" name="sortby" value="sortname" data-bind="checked: sort_by" />Sort by Name</label>
                   <label class="radio"><input type="radio" name="sortby" value="sortcategory" data-bind="checked: sort_by" />Sort by Category</label>
@@ -119,7 +128,7 @@
               </div>
             </div>
             <div class="span4" data-bind="visible: iconstate_loaded">
-                <form id="json-to-binary" method="post" action="http://plists.herokuapp.com/json-to-binary">
+                <form id="json-to-binary" method="post" action="http://iconstate.herokuapp.com/json-to-binary">
                 <textarea id="iconstate-plist-textarea-new" name="json_plist" class="span4" style="height:20em;" wrap="off" data-bind="value: iconstate_plist_textarea_new"></textarea>
                 </form>
             </div>
@@ -128,13 +137,14 @@
       <div id="pages" data-bind="foreach: iconstate_pages">
       <hr />
       <div class="row">   
-      <div class="span10" data-bind="attr: {id: 'page-' + $index()}">
+      <div class="span10" data-bind="attr: {id: 'page-' + $index(), class: $root.device_type() == 2 ? 'span12' : 'span10'}">
         <div class="row">   
         <div class="span2">
         <h2>Page <span data-bind="text: $index() + 1"></span></h2>
-        <label class="checkbox"><input type="checkbox" data-bind="checked: ignore" />ignore</label>
+        <label class="checkbox"><input type="checkbox" data-bind="checked: ignore" />Ignore</label>
+        <label class="checkbox"><input type="checkbox" data-bind="checked: $root.show_titles" />Show titles</label>
         </div>
-        <div class="span8">
+        <div class="span8" data-bind="attr: {class: $root.device_type() == 2 ? 'span10' : 'span8'}">
 
           <div class="row" style="height:612px;" data-bind="sortable: iconstate_cells">    
 
@@ -148,8 +158,8 @@
               <!-- </a> -->
               <!-- /ko -->
               <!-- ko if: folder -->     
-                <div class="row-fluid" style="height:140px; background-color:#eee; margin-bottom: 1em;" data-bind="sortable: folder">
-                  <div class="span3" data-bind="attr: {title: hover_title }">
+                <div class="row-fluid" style="height:140px; overflow:hidden; background-color:#eee; margin-bottom: 1em;" data-bind="sortable: folder">
+                  <div class="span3" data-bind="attr: {title: hover_title, class: $root.folder_cells() <= 9 ? 'span3' : $root.folder_cells() <= 12 ? 'span3' : 'span2'}">
                     <!-- <a href="#result" data-bind="click: function(data) { console.log($data.title, $root.app_data.result[$data.title]); }"> -->
                       <img data-bind="attr: {src: icon}" style="height:auto; width:100%; margin-bottom: 1em;" />
                     <!-- </a> -->
@@ -169,7 +179,7 @@
       <hr />
       <footer class="footer">
       <p class="pull-right"><a href="#">Back to top</a></p>
-      <p>IconState - Organize iPhone Home Screen App Icons</p>
+      <p>IconState - Organize SpringBoard Home Screen App Icons for iOS, iPhone, iPad</p>
       </footer>
 
     </div> <!-- /container -->

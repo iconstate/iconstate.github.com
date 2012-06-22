@@ -1,3 +1,5 @@
+var iconstate_app;
+
 var IconStateApp = function() {
 	var self = this;
 
@@ -136,13 +138,22 @@ var IconStateApp = function() {
 	// self.sort_by_category = ko.observable(false);
 	// self.group_by_category = ko.observable(false);
 	
-	self.iconstate_loaded = ko.observable(false);
+	self.iconstate_loaded = ko.observable(true);
+
+	self.device_type = ko.observable(0);
+
+	self.apps_per_folder = ko.observable(0);
 
 	self.show_titles = ko.observable(false);
 
 	self.sort_by = ko.observable("");
 
 	self.iconstate_pages = ko.observableArray([]);
+
+	self.page_rows = ko.computed(function() { return self.device_type() == 1 ? 5 : 4; }, self);
+	self.page_columns = ko.computed(function() { return self.device_type() == 2 ? 5 : 4; }, self);
+	self.page_cells = ko.computed(function() { return self.device_type() == 0 ? 16 : 20; }, self);
+	self.folder_cells = ko.computed(function() { return self.apps_per_folder() > 0 ? self.apps_per_folder() : self.device_type() == 0 ? 12 : 20; }, self);
 
 
 	self.cell_data = function(iconstate_cell, iconstate_cell_category) {
@@ -393,7 +404,7 @@ var IconStateApp = function() {
 							last_category = current_category;
 							current_folder_cell = 0;
 
-							if (current_page_cell % 16 == 0)
+							if (current_page_cell % self.page_cells() == 0)
 							{
 								sorted_pages.push({iconstate_cells:ko.observableArray([]), ignore: ko.observable(false)});
 							}
@@ -405,12 +416,12 @@ var IconStateApp = function() {
 						}
 						else 
 						{
-							if (current_folder_cell % 12 == 0 || current_category != last_category )
+							if (current_folder_cell % self.folder_cells() == 0 || current_category != last_category )
 							{
 								last_category = current_category;
 								current_folder_cell = 0;
 
-								if (current_page_cell % 16 == 0)
+								if (current_page_cell % self.page_cells() == 0)
 								{
 									sorted_pages.push({iconstate_cells:ko.observableArray([]), ignore: ko.observable(false)});
 								}
@@ -435,7 +446,7 @@ var IconStateApp = function() {
 
 					for (var i=0; i < apps_from_pages.length; i++)
 					{
-						if (i % 16 == 0)
+						if (i % self.page_cells() == 0)
 						{
 							sorted_pages.push({iconstate_cells:ko.observableArray([]), ignore: ko.observable(false)});
 						}
@@ -497,6 +508,7 @@ var IconStateApp = function() {
 
 $(function(){
 
-	ko.applyBindings(new IconStateApp()); 	
+	iconstate_app = new IconStateApp();
+	ko.applyBindings(iconstate_app); 	
 
 });
